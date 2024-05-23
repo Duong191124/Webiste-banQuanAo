@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class SanPhamChiTietRepository {
@@ -45,14 +46,23 @@ public class SanPhamChiTietRepository {
     }
 
 
-    public List<SanPhamChiTiet> findBySPId(int id){
-        List<SanPhamChiTiet> spct = new ArrayList<>();
-        for(SanPhamChiTiet s : ds ){
-            if(s.getId() == id){
-                spct.add(s);
-            }
-        }
-        return spct;
+    public List<SanPhamChiTiet> findBySPId(int idSanPham) {
+        return ds.stream()
+                .filter(s -> s.getIdSanPham() == idSanPham)
+                .collect(Collectors.toList());
+    }
+
+    public List<SanPhamChiTiet> findPage(int page, int pageSize) {
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, ds.size());
+        return ds.subList(start, end);
+    }
+
+    public List<SanPhamChiTiet> findPageBySPId(int idSanPham, int page, int pageSize) {
+        List<SanPhamChiTiet> filteredList = findBySPId(idSanPham);
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, filteredList.size());
+        return filteredList.subList(start, end);
     }
 
     public void Update(SanPhamChiTiet newValue){
@@ -64,9 +74,4 @@ public class SanPhamChiTietRepository {
         }
     }
 
-    public List<SanPhamChiTiet> findPage(int page, int pageSize) {
-        int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, ds.size());
-        return ds.subList(start, end);
-    }
 }

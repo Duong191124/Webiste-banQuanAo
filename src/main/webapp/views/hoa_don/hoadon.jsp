@@ -47,7 +47,7 @@
                 <td>${hoadon.ngayMuaHang}</td>
                 <td>${hoadon.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán"}</td>
                 <td>
-                    <a href="/hdct/hdct" class="btn btn-danger">Chi Tiết</a>
+                    <a href="/hdct/hdctdetail?idHoaDon=${hoadon.id}" class="btn btn-primary">Chi Tiết</a>
                     <a href="/hoa-don/hoadonedit/${hoadon.id}" class="btn btn-warning">Edit</a>
                 </td>
             </tr>

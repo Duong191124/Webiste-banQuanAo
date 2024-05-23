@@ -73,7 +73,6 @@ public class LoginController {
 
     @GetMapping("logout")
     public String logout() {
-        System.out.println("123");
         nhanVienRepository.logout();
         return "redirect:/login";
     }

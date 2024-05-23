@@ -36,6 +36,7 @@
             <c:forEach items="${foundData}" var="product">
                 <tr>
                     <td>${product.id}</td>
+                    <td>${product.idSanPham}</td>
                     <td>${product.ma}</td>
                     <td>${product.soLuong}</td>
                     <td>${product.donGia}</td>
@@ -55,17 +56,17 @@
         <ul class="pagination">
             <li class="page-item">
                 <c:if test="${page > 1}">
-                    <a href="?page=${page - 1}" class="page-link">Previous</a>
+                    <a href="spctdetail?idSanPham=${idSanPham}&page=${page - 1}" class="page-link">Previous</a>
                 </c:if>
             </li>
             <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-                <li class="page-item">
-                    <a href="?page=${pageNumber}" class="page-link">${pageNumber}</a>
+                <li class="page-item ${pageNumber == page ? 'active' : ''}">
+                    <a href="spctdetail?idSanPham=${idSanPham}&page=${pageNumber}" class="page-link">${pageNumber}</a>
                 </li>
             </c:forEach>
             <li class="page-item">
                 <c:if test="${page < maxPage}">
-                    <a href="?page=${page + 1}" class="page-link">Next</a>
+                    <a href="spctdetail?idSanPham=${idSanPham}&page=${page + 1}" class="page-link">Next</a>
                 </c:if>
             </li>
         </ul>

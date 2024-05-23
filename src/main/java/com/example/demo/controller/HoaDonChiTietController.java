@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.HoaDon;
 import com.example.demo.entity.HoaDonChiTiet;
+import com.example.demo.entity.SanPhamChiTiet;
 import com.example.demo.repository.HoaDonChiTietRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -22,19 +23,21 @@ public class HoaDonChiTietController {
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
 
-    @GetMapping("hdct")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page){
+    @GetMapping("hdctdetail")
+    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam("idHoaDon") Integer idHoaDon){
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return "redirect:/login";
         }
         int pageSize = 4;
-        List<HoaDonChiTiet> products = hoaDonChiTietRepository.findPage(page, pageSize);
-        int totalProducts = hoaDonChiTietRepository.findAll().size();
+        List<HoaDonChiTiet> products = hoaDonChiTietRepository.findPageByHDId(idHoaDon, page, pageSize);
+        int totalProducts = hoaDonChiTietRepository.findByHDId(idHoaDon).size();
         int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
+
         model.addAttribute("data", products);
         model.addAttribute("page", page);
         model.addAttribute("maxPage", maxPage);
+        model.addAttribute("idHoaDon", idHoaDon);
         return "hdct/hdct";
     }
 

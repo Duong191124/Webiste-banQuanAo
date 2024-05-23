@@ -47,7 +47,7 @@
                 <td>${product.ten}</td>
                 <td>${product.trangThai == 1 ? "Hoạt động" : "Không hoạt động"}</td>
                 <td>
-                    <a href="/spct/spct" class="btn btn-primary">Chi Tiết</a>
+                    <a href="/spct/spctdetail?idSanPham=${product.id}" class="btn btn-primary">Chi Tiết</a>
                     <a href="/san-pham/sanphamdelete/${product.id}" class="btn btn-danger">Delete</a>
                     <a href="/san-pham/sanphamedit/${product.id}" class="btn btn-warning">Edit</a>
                 </td>

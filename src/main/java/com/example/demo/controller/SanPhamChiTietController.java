@@ -23,19 +23,21 @@ public class SanPhamChiTietController {
     @Autowired
     private SanPhamChiTietRepository sanPhamChiTietRepository;
 
-    @RequestMapping("spct")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page){
+    @RequestMapping("spctdetail")
+    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam("idSanPham") Integer idSanPham){
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return "redirect:/login";
         }
         int pageSize = 4;
-        List<SanPhamChiTiet> products = sanPhamChiTietRepository.findPage(page, pageSize);
-        int totalProducts = sanPhamChiTietRepository.findAll().size();
+        List<SanPhamChiTiet> products = sanPhamChiTietRepository.findPageBySPId(idSanPham, page, pageSize);
+        int totalProducts = sanPhamChiTietRepository.findBySPId(idSanPham).size();
         int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
-        model.addAttribute("foundData",products);
+
+        model.addAttribute("foundData", products);
         model.addAttribute("page", page);
         model.addAttribute("maxPage", maxPage);
+        model.addAttribute("idSanPham", idSanPham);
         return "spct/spct";
     }
 
