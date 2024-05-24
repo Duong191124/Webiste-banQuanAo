@@ -14,7 +14,11 @@ public class KichThuocRepository {
     public KichThuocRepository(){
         this.ds = new ArrayList<>();
         this.ds.add(new KichThuoc(1, "KT01", "Size S", 1));
-        this.ds.add(new KichThuoc(2, "KT02", "Size L", 0));
+        this.ds.add(new KichThuoc(2, "KT02", "Size L", 1));
+        this.ds.add(new KichThuoc(3, "KT03", "Size M", 1));
+        this.ds.add(new KichThuoc(4, "KT04", "Size XL", 1));
+        this.ds.add(new KichThuoc(5, "KT05", "Size XXL", 1));
+        this.ds.add(new KichThuoc(6, "KT06", "Size S", 1));
     }
 
     public List<KichThuoc> findAll(){

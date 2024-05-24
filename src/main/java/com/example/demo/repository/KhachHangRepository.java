@@ -15,7 +15,11 @@ public class KhachHangRepository {
 
     public KhachHangRepository(){
         this.ds.add(new KhachHang(1, "KH01", "Duong", "03927242725", 1));
-        this.ds.add(new KhachHang(2, "KH02", "Duong2", "03927242725", 0));
+        this.ds.add(new KhachHang(2, "KH02", "Duong2", "03927242725", 1));
+        this.ds.add(new KhachHang(3, "KH03", "Tu", "03927242725", 1));
+        this.ds.add(new KhachHang(4, "KH04", "Quan", "03927242725", 1));
+        this.ds.add(new KhachHang(5, "KH05", "Duong3", "03927242725", 1));
+        this.ds.add(new KhachHang(6, "KH06", "Duong4", "03927242725", 1));
     }
 
     public List<KhachHang> findAll(){

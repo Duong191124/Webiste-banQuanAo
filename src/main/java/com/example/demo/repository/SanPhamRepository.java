@@ -15,11 +15,11 @@ public class SanPhamRepository {
     public SanPhamRepository(){
         this.sp = new ArrayList<>();
         this.sp.add(new SanPham(1, "SP01", "Ao", 1));
-        this.sp.add(new SanPham(2, "SP02", "Ao", 0));
+        this.sp.add(new SanPham(2, "SP02", "Ao", 1));
         this.sp.add(new SanPham(3, "SP03", "Quan", 1));
         this.sp.add(new SanPham(4, "SP04", "Ao", 1));
         this.sp.add(new SanPham(5, "SP05", "Quan", 1));
-        this.sp.add(new SanPham(6, "SP06", "Ao", 0));
+        this.sp.add(new SanPham(6, "SP06", "Ao", 1));
     }
 
     public List<SanPham> findAll(){

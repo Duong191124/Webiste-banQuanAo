@@ -18,8 +18,9 @@ public class NhanVienRepository {
         this.ds.add(new NhanVien(1, "Admin", "Duong", "Admin", "123", 1, "Admin"));
         this.ds.add(new NhanVien(2, "NV02", "Duong", "NV02", "123", 1, "NhanVien"));
         this.ds.add(new NhanVien(3, "NV03", "Nam", "NV03", "123", 1, "NhanVien"));
-        this.ds.add(new NhanVien(4, "NV04", "Quan", "NV04", "123", 0, "NhanVien"));
-        this.ds.add(new NhanVien(5, "NV05", "Nam", "NV05", "123", 0, "NhanVien"));
+        this.ds.add(new NhanVien(4, "NV04", "Quan", "NV04", "123", 1, "NhanVien"));
+        this.ds.add(new NhanVien(5, "NV05", "Nam", "NV05", "123", 1, "NhanVien"));
+        this.ds.add(new NhanVien(6, "NV06", "Tu", "NV06", "1", 1, "NhanVien"));
     }
 
     public List<NhanVien> findAll(){

@@ -19,9 +19,11 @@ public class HoaDonRepository {
         this.date = new Date();
         this.ds = new ArrayList<>();
         this.ds.add(new HoaDon(1, 1, 1, date, 1));
-        this.ds.add(new HoaDon(2, 2, 1, date, 0));
-        this.ds.add(new HoaDon(3, 1, 1, date, 1));
-        this.ds.add(new HoaDon(4, 3, 1, date, 0));
+        this.ds.add(new HoaDon(2, 2, 2, date, 1));
+        this.ds.add(new HoaDon(3, 3, 3, date, 1));
+        this.ds.add(new HoaDon(4, 4, 4, date, 1));
+        this.ds.add(new HoaDon(5, 5, 5, date, 1));
+        this.ds.add(new HoaDon(6, 6, 6, date, 1));
     }
 
     public List<HoaDon> findAll(){

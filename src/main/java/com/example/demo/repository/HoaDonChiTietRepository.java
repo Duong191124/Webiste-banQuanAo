@@ -17,7 +17,14 @@ public class HoaDonChiTietRepository {
     public HoaDonChiTietRepository(){
         this.ds = new ArrayList<>();
         this.ds.add(new HoaDonChiTiet(1, 1,1, 10, 500000, localDateTime, 1));
-        this.ds.add(new HoaDonChiTiet(2, 2,2, 5, 500000, localDateTime, 0));
+        this.ds.add(new HoaDonChiTiet(2, 2,2, 5, 500000, localDateTime, 1));
+        this.ds.add(new HoaDonChiTiet(3, 3,3, 10, 500000, localDateTime, 1));
+        this.ds.add(new HoaDonChiTiet(4, 4,4, 5, 500000, localDateTime, 1));
+        this.ds.add(new HoaDonChiTiet(5, 5,5, 10, 500000, localDateTime, 1));
+        this.ds.add(new HoaDonChiTiet(6, 6,6, 5, 500000, localDateTime, 1));
+        this.ds.add(new HoaDonChiTiet(7, 1,1, 5, 500000, localDateTime, 1));
+        this.ds.add(new HoaDonChiTiet(8, 2,2, 10, 500000, localDateTime, 1));
+        this.ds.add(new HoaDonChiTiet(9, 3,3, 5, 500000, localDateTime, 1));
     }
 
     public List<HoaDonChiTiet> findAll(){

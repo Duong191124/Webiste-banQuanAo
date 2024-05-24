@@ -14,7 +14,11 @@ public class MauSacRepository {
     public MauSacRepository(){
         this.ds = new ArrayList<>();
         this.ds.add(new MauSac(1, "MS01", "Đỏ", 1));
-        this.ds.add(new MauSac(2, "MS02", "Đen", 0));
+        this.ds.add(new MauSac(2, "MS02", "Đen", 1));
+        this.ds.add(new MauSac(3, "MS03", "Vàng", 1));
+        this.ds.add(new MauSac(4, "MS04", "Trắng", 1));
+        this.ds.add(new MauSac(5, "MS05", "Xanh", 1));
+        this.ds.add(new MauSac(6, "MS06", "Tím", 1));
     }
 
     public List<MauSac> findAll(){
