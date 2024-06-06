@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.KhachHang;
-import com.example.demo.entity.SanPham;
-import com.example.demo.repository.KhachHangRepository;
+import com.example.demo.repository.KhachHangRepo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,32 +22,17 @@ import java.util.Map;
 public class KhachHangController {
 
     @Autowired
-    private KhachHangRepository khachHangRepository;
+    private KhachHangRepo khachHangRepository;
 
     @GetMapping("khachhang")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page){
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
+    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "20") int pageSize){
+        String tenDangNhap = (String) session.getAttribute("tenDangNhap");
+        if (tenDangNhap == null) {
             return "redirect:/login";
         }
-        int pageSize = 4;
-        List<String> productNames = khachHangRepository.getDistinctProductName();
-        List<KhachHang> products = khachHangRepository.findPage(page, pageSize);
-        int totalProducts = khachHangRepository.findAll().size();
-        int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
-        model.addAttribute("productNames", productNames);
-        model.addAttribute("data", products);
-        model.addAttribute("page", page);
-        model.addAttribute("maxPage", maxPage);
-        return "khach_hang/khachhang";
-    }
-
-    @GetMapping("searchkhachhang")
-    public String searchSanPhams(@RequestParam("ten") String ten, Model model) {
-        List<KhachHang> products = khachHangRepository.findByName(ten);
-        model.addAttribute("data", products);
-        List<String> productNames = khachHangRepository.getDistinctProductName();
-        model.addAttribute("productNames", productNames);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        Page<KhachHang> p = this.khachHangRepository.findAll(pageRequest);
+        model.addAttribute("data", p);
         return "khach_hang/khachhang";
     }
 
@@ -68,7 +54,7 @@ public class KhachHangController {
             model.addAttribute("data", kh);
             return "khach_hang/createkhachhang";
         }
-        this.khachHangRepository.create(kh);
+        this.khachHangRepository.save(kh);
         return "redirect:/khach-hang/khachhang";
     }
 
@@ -81,14 +67,14 @@ public class KhachHangController {
 
     @GetMapping("khachhangedit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        KhachHang kh = this.khachHangRepository.findById(id);
+        KhachHang kh = this.khachHangRepository.findById(id).get();
         model.addAttribute("data", kh);
         return "khach_hang/khachhangedit";
     }
 
     @PostMapping("khachhangupdate/{id}")
     public String update(KhachHang kh){
-        this.khachHangRepository.Update(kh);
+        this.khachHangRepository.save(kh);
         return "redirect:/khach-hang/khachhang";
     }
 }

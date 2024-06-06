@@ -1,7 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="f" uri="jakarta.tags.functions" %>
-<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,35 +19,53 @@
     <h4>Update</h4>
     <form action="/spct/spctupdate/${data.id}" method="POST">
         <div class="mt-2">
+            <label for="" class="form-label">Sản phẩm: </label>
+            <select name="sp" value="${data.sp.ten}" class="form-control">
+                <option value="${data.sp.ten}">${data.sp.ten}</option>
+                <c:forEach var="product" items="${availableProducts}">
+                    <option value="${product}">${product}</option>
+                </c:forEach>
+            </select>
+        </div>
+        <div class="mt-2">
+            <label for="" class="form-label">Màu sắc: </label>
+            <select name="ms" value="${data.ms.ten}" class="form-control">
+                <option value="${data.ms.ten}">${data.ms.ten}</option>
+                <c:forEach var="color" items="${availableColors}">
+                    <option value="${color}">${color}</option>
+                </c:forEach>
+            </select>
+        </div>
+        <div class="mt-2">
+            <label for="" class="form-label">Kích thước: </label>
+            <select name="kt" value="${data.kt.ten}" class="form-control">
+                <option value="${data.kt.ten}">${data.kt.ten}</option>
+                <c:forEach var="size" items="${availableSizes}">
+                    <option value="${size}">${size}</option>
+                </c:forEach>
+            </select>
+        </div>
+        <div class="mt-2">
             <label for="" class="form-label">Ma: </label>
-            <input type="text" placeholder="Ma" class="form-label" name="ma" value="${data.ma}">
-            <c:if test="${not empty error['ma']}">
-                <small style="color: red">${error['ma']}</small>
-            </c:if>
+            <input type="text" class="form-control" name="maSPCT" value="${data.maSPCT}">
         </div>
         <div class="mt-2">
             <label for="" class="form-label">Số lượng: </label>
-            <input type="text" placeholder="Số lượng" class="form-label" name="soLuong" value="${data.soLuong}">
-            <c:if test="${not empty error['soLuong']}">
-                <small style="color: red">${error['soLuong']}</small>
-            </c:if>
+            <input type="text" placeholder="Số lượng" class="form-control" name="soLuong" value="${data.soLuong}">
         </div>
         <div class="mt-2">
             <label for="" class="form-label">Đơn giá: </label>
-            <input type="text" placeholder="Đơn giá" class="form-label" name="donGia" value="${data.donGia}">
-            <c:if test="${not empty error['donGia']}">
-                <small style="color: red">${error['donGia']}</small>
-            </c:if>
+            <input type="text" placeholder="Đơn giá" class="form-control" name="donGia" value="${data.donGia}">
         </div>
         <div class="mt-2">
             <label for="" class="form-label">Trang thai: </label>
-            <select name="trangThai" id="" class="form-label" value="${data.trangThai}">
+            <select name="trangThai" id="" class="form-control" value="${data.trangThai}">
                 <option value="1">Hoạt động</option>
                 <option value="0">Không hoạt động</option>
             </select>
         </div>
         <div class="mt-2">
-            <button type="submit" class="btn btn-success w25 rounded rounded-2">Update</button>
+            <button type="submit" class="btn btn-success w-25 rounded rounded-2">Update</button>
         </div>
     </form>
 </body>

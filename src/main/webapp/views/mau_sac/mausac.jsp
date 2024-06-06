@@ -19,7 +19,7 @@
 <body>
     <div class="d-flex justify-content-between mt-2">
         <h4>Danh sách màu sắc</h4>
-        <a href="/spct/spct" class="btn btn-info">Back</a>
+        <a href="/san-pham/sanpham" class="btn btn-info">Back</a>
     </div>
     <div class="mt-2">
         <a href="/mau-sac/createmausac" class="btn btn-success">Thêm màu sắc</a>
@@ -36,7 +36,7 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach items="${data}" var="mausac" varStatus="MS">
+                <c:forEach items="${data.content}" var="mausac" varStatus="MS">
                     <tr>
                         <td>${mausac.id}</td>
                         <td>${mausac.ma}</td>
@@ -55,20 +55,19 @@
     <div class="mt-2 d-flex justify-content-center">
         <ul class="pagination">
             <li class="page-item">
-                <c:if test="${page > 1}">
-                    <a href="?page=${page - 1}" class="page-link">Previous</a>
-                </c:if>
+                <a class="page-link" href="/mau-sac/mausac?page=${data.number - 1}">Previous</a>
             </li>
-            <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-                <li class="page-item">
-                    <a href="?page=${pageNumber}" class="page-link">${pageNumber}</a>
-                </li>
+            <c:forEach begin="1" end="${ data.totalPages }" var="page">
+                <c:if test="${ page == 1 || page == data.totalPages || ( page >= data.number - 1 && page <= data.number + 1 ) }">
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/mau-sac/mausac?page=${page}">
+                                ${ page }
+                        </a>
+                    </li>
+                </c:if>
             </c:forEach>
-            <li class="page-item">
-                <c:if test="${page < maxPage}">
-                    <a href="?page=${page + 1}" class="page-link">Next</a>
-                </c:if>
-            </li>
+            <li class="page-item"><a class="page-link" href="/mau-sac/mausac?page=${data.number + 1}">Next</a></li>
         </ul>
     </div>
 </body>

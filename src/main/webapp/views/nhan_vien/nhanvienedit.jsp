@@ -36,20 +36,13 @@
         <input type="password" name="matKhau" class="form-control" placeholder="Mật khẩu" value="${data.matKhau}">
     </div>
     <div class="mt-2">
-        <label for="" class="form-label" >Trạng thái: </label>
-        <select name="trangThai" class="form-control">
-            <option value="1" ${data.trangThai == 1 ? "selected" : ""}>Hoạt động</option>
-            <option value="0" ${data.trangThai == 1 ? "selected" : ""}>Ngừng hoạt động</option>
-        </select>
-    </div>
-    <div class="mt-2">
         <label for="" class="form-label" >Chức vụ: </label>
         <div class="form-check">
-            <input type="radio" class="form-check-input" id="radio1" name="role" value="Admin" ${data.role == "Admin" ? "checked" : ""}>Admin
+            <input type="radio" class="form-check-input" id="radio1" name="role" value="1" ${data.role == 1 ? "checked" : ""}>Admin
             <label class="form-check-label" for="radio1"></label>
         </div>
         <div class="form-check">
-            <input type="radio" class="form-check-input" id="radio2" name="role" value="NhanVien" ${data.role == "NhanVien" ? "checked" : ""}>NhanVien
+            <input type="radio" class="form-check-input" id="radio2" name="role" value="0" ${data.role == 0 ? "checked" : ""}>NhanVien
             <label class="form-check-label" for="radio2"></label>
         </div>
     </div>

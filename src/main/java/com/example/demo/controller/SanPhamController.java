@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.NhanVien;
 import com.example.demo.entity.SanPham;
-import com.example.demo.repository.SanPhamRepository;
+import com.example.demo.repository.SanPhamRepo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,34 +23,20 @@ import java.util.Map;
 public class SanPhamController {
 
     @Autowired
-    private SanPhamRepository sanPhamRepository;
+    private SanPhamRepo sanPhamRepository;
 
     @RequestMapping("sanpham")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page){
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
+    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "20") int pageSize){
+        String tenDangNhap = (String) session.getAttribute("tenDangNhap");
+        if (tenDangNhap == null) {
             return "redirect:/login";
         }
-        int pageSize = 4;
-        List<String> productNames = sanPhamRepository.getDistinctProductNames();
-        List<SanPham> products = sanPhamRepository.findPage(page, pageSize);
-        int totalProducts = sanPhamRepository.findAll().size();
-        int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
-        model.addAttribute("productNames", productNames);
-        model.addAttribute("products", products);
-        model.addAttribute("page", page);
-        model.addAttribute("maxPage", maxPage);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        Page<SanPham> p = this.sanPhamRepository.findAll(pageRequest);
+        model.addAttribute("products", p);
         return "san_pham/sanpham";
     }
 
-    @GetMapping("searchsanpham")
-    public String searchSanPhams(@RequestParam("name") String name, Model model) {
-        List<SanPham> products = sanPhamRepository.findByName(name);
-        model.addAttribute("products", products);
-        List<String> productNames = sanPhamRepository.getDistinctProductNames();
-        model.addAttribute("productNames", productNames);
-        return "san_pham/sanpham";
-    }
 
     @RequestMapping("createsanpham")
     public String create(@ModelAttribute("data") SanPham sp) {
@@ -67,7 +55,7 @@ public class SanPhamController {
             model.addAttribute("data", sp);
             return "san_pham/createsanpham";
         }
-        this.sanPhamRepository.create(sp);
+        this.sanPhamRepository.save(sp);
         return "redirect:/san-pham/sanpham";
     }
 
@@ -79,14 +67,14 @@ public class SanPhamController {
 
     @GetMapping("sanphamedit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        SanPham sp = this.sanPhamRepository.findById(id);
+        SanPham sp = this.sanPhamRepository.findById(id).get();
         model.addAttribute("data", sp);
         return "san_pham/sanphamedit";
     }
 
     @PostMapping("sanphamupdate/{id}")
     public String update(SanPham sp){
-        this.sanPhamRepository.Update(sp);
+        this.sanPhamRepository.save(sp);
         return "redirect:/san-pham/sanpham";
     }
 }

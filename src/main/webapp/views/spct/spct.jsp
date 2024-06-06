@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="f" uri="jakarta.tags.functions" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,11 +9,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
@@ -20,12 +17,18 @@
     <h4>Danh sách sản phẩm chi tiết</h4>
     <a href="/san-pham/sanpham" class="btn btn-info">Back</a>
 </div>
+<div class="mt-2">
+    <a href="/spct/createspct" class="btn btn-success">Thêm sản phẩm chi tiết</a>
+</div>
     <div class="mt-2">
         <table class="table">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Mã</th>
+                <th>Tên sản phẩm</th>
+                <th>Tên màu sắc</th>
+                <th>Tên kích thước</th>
+                <th>Mã SPCT</th>
                 <th>Số lượng</th>
                 <th>Đơn giá</th>
                 <th>Trạng thái</th>
@@ -33,11 +36,13 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${foundData}" var="product">
+            <c:forEach items="${foundData.content}" var="product">
                 <tr>
                     <td>${product.id}</td>
-                    <td>${product.idSanPham}</td>
-                    <td>${product.ma}</td>
+                    <td>${product.sp.ten}</td>
+                    <td>${product.ms.ten}</td>
+                    <td>${product.kt.ten}</td>
+                    <td>${product.maSPCT}</td>
                     <td>${product.soLuong}</td>
                     <td>${product.donGia}</td>
                     <td>${product.trangThai == 1 ? "Hoạt động" : "Không hoạt động"}</td>
@@ -52,24 +57,28 @@
             </tbody>
         </table>
     </div>
-    <div class="mt-2 d-flex justify-content-center">
-        <ul class="pagination">
+    <div class="d-flex justify-content-center">
+    <ul class="pagination">
+        <c:if test="${!foundData.isFirst()}">
             <li class="page-item">
-                <c:if test="${page > 1}">
-                    <a href="spctdetail?idSanPham=${idSanPham}&page=${page - 1}" class="page-link">Previous</a>
-                </c:if>
+                <a class="page-link" href="<c:url value='/spct/spct?idSanPham=${idSanPham}&page=${foundData.number}&limit=${pageSize}'/>">Previous</a>
             </li>
-            <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-                <li class="page-item ${pageNumber == page ? 'active' : ''}">
-                    <a href="spctdetail?idSanPham=${idSanPham}&page=${pageNumber}" class="page-link">${pageNumber}</a>
+        </c:if>
+        <c:forEach begin="1" end="${foundData.totalPages}" var="page">
+            <c:if test="${page == 1 || page == foundData.totalPages || (page >= foundData.number - 1 && page <= foundData.number + 2)}">
+                <li class="page-item <c:if test='${page == foundData.number + 1}'>active</c:if>'">
+                    <a class="page-link"  href="<c:url value='/spct/spct?idSanPham=${idSanPham}&page=${page}&limit=${pageSize}'/>">${page}</a>
                 </li>
-            </c:forEach>
+            </c:if>
+        </c:forEach>
+        <c:if test="${!foundData.isLast()}">
             <li class="page-item">
-                <c:if test="${page < maxPage}">
-                    <a href="spctdetail?idSanPham=${idSanPham}&page=${page + 1}" class="page-link">Next</a>
-                </c:if>
+                <a class="page-link" href="<c:url value='/spct/spct?idSanPham=${idSanPham}&page=${foundData.number + 2}&limit=${pageSize}'/>">Next</a>
             </li>
-        </ul>
+        </c:if>
+    </ul>
     </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

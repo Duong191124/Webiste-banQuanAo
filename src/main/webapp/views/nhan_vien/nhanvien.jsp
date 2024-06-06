@@ -19,17 +19,17 @@
 <body>
 <div class="d-flex justify-content-between mt-2">
     <h4>Danh sách nhân viên</h4>
-    <a href="${pageContext.request.contextPath}/back" class="btn btn-info">Back</a>
-</div>
-<div class="mt-2">
-    <form action="/nhan-vien/searchnhanvien" method="get">
-        <select name="ten" style="width: 300px; height: 35px; border-radius: 7px;" class="mt-2">
-            <c:forEach var="name" items="${productNames}">
-                <option value="${name}">${name}</option>
-            </c:forEach>
-        </select>
-        <button type="submit" class="btn btn-info ms-2">Search</button>
-    </form>
+    <c:choose>
+        <c:when test="${sessionScope.role == 1}">
+            <a href="${pageContext.request.contextPath}/admin/adminindex" class="btn btn-info">Back</a>
+        </c:when>
+        <c:when test="${sessionScope.role == 0}">
+            <a href="${pageContext.request.contextPath}/user/userindex" class="btn btn-info">Back</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/login" class="btn btn-info">Back</a>
+        </c:otherwise>
+    </c:choose>
 </div>
 <div class="mt-2">
     <a href="/nhan-vien/createnhanvien" class="btn btn-success">Thêm nhân viên</a>
@@ -43,21 +43,19 @@
             <th>Tên</th>
             <th>Tên đăng nhập</th>
             <th>Mật khẩu</th>
-            <th>Trạng thái</th>
             <th>Chức vụ</th>
             <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${data}" var="nhanvien">
+        <c:forEach items="${data.content}" var="nhanvien">
             <tr>
                 <td>${nhanvien.id}</td>
                 <td>${nhanvien.ma}</td>
                 <td>${nhanvien.ten}</td>
                 <td>${nhanvien.tenDangNhap}</td>
                 <td>${nhanvien.matKhau}</td>
-                <td>${nhanvien.trangThai == 1 ? "Hoạt động" : "Ngừng hoạt động"}</td>
-                <td>${nhanvien.role}</td>
+                <td>${nhanvien.role == 1 ? "Admin" : "Nhân Viên"}</td>
                 <td>
                     <a href="/nhan-vien/nhanviendelete/${nhanvien.id}" class="btn btn-danger">Delete</a>
                     <a href="/nhan-vien/nhanvienedit/${nhanvien.id}" class="btn btn-danger">Edit</a>
@@ -70,20 +68,20 @@
 </div>
 <div class="mt-2 d-flex justify-content-center">
     <ul class="pagination">
-        <li class="page-item">
-            <c:if test="${page > 1}">
-                <a href="?page=${page - 1}" class="page-link">Previous</a>
-            </c:if>
+        <li class="page-item ${data.number == 1 ? '' : 'disabled'}">
+            <a class="page-link" href="/nhan-vien/nhanvien?page=${data.number - 1}">Previous</a>
         </li>
-        <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-            <li class="page-item">
-                <a href="?page=${pageNumber}" class="page-link">${pageNumber}</a>
-            </li>
-        </c:forEach>
-        <li class="page-item">
-            <c:if test="${page < maxPage}">
-                <a href="?page=${page + 1}" class="page-link">Next</a>
+        <c:forEach begin="1" end="${data.totalPages}" var="page">
+            <c:if test="${page == 1 || page == data.totalPages || (page >= data.number && page <= data.number + 1)}">
+                <li class="page-item ${page == data.number ? 'active' : ''}">
+                    <a class="page-link" href="/nhan-vien/nhanvien?page=${page}">
+                            ${page}
+                    </a>
+                </li>
             </c:if>
+        </c:forEach>
+        <li class="page-item ${data.number + 1 >= data.totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="/nhan-vien/nhanvien?page=${data.number + 1}">Next</a>
         </li>
     </ul>
 </div>

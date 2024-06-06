@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.MauSac;
-import com.example.demo.entity.SanPham;
-import com.example.demo.repository.MauSacRepository;
+import com.example.demo.repository.MauSacRepo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,21 +21,17 @@ import java.util.Map;
 @RequestMapping("mau-sac")
 public class MauSacController {
     @Autowired
-    private MauSacRepository mauSacRepository;
+    private MauSacRepo mauSacRepository;
 
     @GetMapping("mausac")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page){
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
+    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "20") int pageSize){
+        String tenDangNhap = (String) session.getAttribute("tenDangNhap");
+        if (tenDangNhap == null) {
             return "redirect:/login";
         }
-        int pageSize = 4;
-        List<MauSac> products = mauSacRepository.findPage(page, pageSize);
-        int totalProducts = mauSacRepository.findAll().size();
-        int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
-        model.addAttribute("data", products);
-        model.addAttribute("page", page);
-        model.addAttribute("maxPage", maxPage);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        Page<MauSac> p = this.mauSacRepository.findAll(pageRequest);
+        model.addAttribute("data", p);
         return "mau_sac/mausac";
     }
 
@@ -56,7 +53,7 @@ public class MauSacController {
             model.addAttribute("data", ms);
             return "mau_sac/createmausac";
         }
-        this.mauSacRepository.create(ms);
+        this.mauSacRepository.save(ms);
         return "redirect:/mau-sac/mausac";
     }
 
@@ -69,14 +66,14 @@ public class MauSacController {
 
     @GetMapping("mausacedit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        MauSac ms = this.mauSacRepository.findById(id);
+        MauSac ms = this.mauSacRepository.findById(id).get();
         model.addAttribute("data", ms);
         return "mau_sac/mausacedit";
     }
 
     @PostMapping("mausacupdate/{id}")
     public String update(MauSac ms){
-        this.mauSacRepository.Update(ms);
+        this.mauSacRepository.save(ms);
         return "redirect:/mau-sac/mausac";
     }
 }

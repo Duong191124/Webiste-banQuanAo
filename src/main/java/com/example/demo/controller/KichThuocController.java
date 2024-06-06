@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.KichThuoc;
-import com.example.demo.entity.MauSac;
-import com.example.demo.repository.KichThuocRepository;
+import com.example.demo.repository.KichThuocRepo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,21 +21,17 @@ import java.util.Map;
 @RequestMapping("kich-thuoc")
 public class KichThuocController {
     @Autowired
-    private KichThuocRepository kichThuocRepository;
+    private KichThuocRepo kichThuocRepository;
 
     @GetMapping("kichthuoc")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page){
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
+    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "20") int pageSize){
+        String tenDangNhap = (String) session.getAttribute("tenDangNhap");
+        if (tenDangNhap == null) {
             return "redirect:/login";
         }
-        int pageSize = 4;
-        List<KichThuoc> products = kichThuocRepository.findPage(page, pageSize);
-        int totalProducts = kichThuocRepository.findAll().size();
-        int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
-        model.addAttribute("data", products);
-        model.addAttribute("page", page);
-        model.addAttribute("maxPage", maxPage);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        Page<KichThuoc> p = this.kichThuocRepository.findAll(pageRequest);
+        model.addAttribute("data", p);
         return "kich_thuoc/kichthuoc";
     }
 
@@ -56,7 +53,7 @@ public class KichThuocController {
             model.addAttribute("data", kt);
             return "kich_thuoc/createkichthuoc";
         }
-        this.kichThuocRepository.create(kt);
+        this.kichThuocRepository.save(kt);
         return "redirect:/kich-thuoc/kichthuoc";
     }
 
@@ -69,14 +66,14 @@ public class KichThuocController {
 
     @GetMapping("kichthuocedit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        KichThuoc kt = this.kichThuocRepository.findById(id);
+        KichThuoc kt = this.kichThuocRepository.findById(id).get();
         model.addAttribute("data", kt);
         return "kich_thuoc/kichthuocedit";
     }
 
     @PostMapping("kichthuocupdate/{id}")
     public String update(KichThuoc kt){
-        this.kichThuocRepository.Update(kt);
+        this.kichThuocRepository.save(kt);
         return "redirect:/kich-thuoc/kichthuoc";
     }
 }

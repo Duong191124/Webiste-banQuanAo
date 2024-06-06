@@ -35,7 +35,7 @@
                 </li>
             </ul>
             <form class="d-flex">
-                <h5 class="me-3 mt-2" style="color: white">Welcome, ${username}</h5>
+                <h5 class="me-3 mt-2" style="color: white">Welcome, ${adminName}</h5>
                 <a href="/logout" class="btn btn-danger">Logout</a>
             </form>
         </div>

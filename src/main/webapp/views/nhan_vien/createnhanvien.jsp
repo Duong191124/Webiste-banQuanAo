@@ -48,20 +48,13 @@
             </c:if>
         </div>
         <div class="mt-2">
-            <label for="" class="form-label" >Trạng thái: </label>
-            <select name="trangThai" class="form-control">
-                <option value="1">Hoạt động</option>
-                <option value="0">Ngừng hoạt động</option>
-            </select>
-        </div>
-        <div class="mt-2">
             <label for="" class="form-label" >Chức vụ: </label>
             <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio1" name="role" value="Admin" checked>Admin
+                <input type="radio" class="form-check-input" id="radio1" name="role" value="1" checked>Admin
                 <label class="form-check-label" for="radio1"></label>
             </div>
             <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio2" name="role" value="NhanVien">NhanVien
+                <input type="radio" class="form-check-input" id="radio2" name="role" value="0">NhanVien
                 <label class="form-check-label" for="radio2"></label>
             </div>
         </div>

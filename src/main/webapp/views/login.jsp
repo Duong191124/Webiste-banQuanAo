@@ -25,11 +25,11 @@
                     <form action="/login" method="post">
                         <div class="mt-2">
                             <label for="" class="form-label">Username: </label>
-                            <input type="text" placeholder="Username" name="username" class="form-control">
+                            <input type="text" placeholder="Username" name="tenDangNhap" class="form-control">
                         </div>
                         <div class="mt-2">
                             <label for="" class="form-label">Password: </label>
-                            <input type="text" placeholder="Password" name="password" class="form-control">
+                            <input type="text" placeholder="Password" name="matKhau" class="form-control">
                         </div>
                         <div class="mt-2 d-flex justify-content-center">
                             <button type="submit" class="btn btn-success w-25">Login</button>

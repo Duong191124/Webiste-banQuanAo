@@ -1,13 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.KhachHang;
-import com.example.demo.entity.MauSac;
 import com.example.demo.entity.NhanVien;
-import com.example.demo.entity.SanPham;
-import com.example.demo.repository.NhanVienRepository;
+import com.example.demo.entity.SanPhamChiTiet;
+import com.example.demo.repository.NhanVienRepo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,34 +23,21 @@ import java.util.stream.Collectors;
 @RequestMapping("nhan-vien")
 public class NhanVienController {
     @Autowired
-    private NhanVienRepository nhanVienRepository;
+    private NhanVienRepo nhanVienRepository;
 
-    @RequestMapping("nhanvien")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page){
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
+    @GetMapping("nhanvien")
+    public String index(Model model,HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber,
+                        @RequestParam(name = "limit", defaultValue = "20") int pageSize,
+                        @RequestParam(value = "keyword", defaultValue = "") String keyword){
+        String tenDangNhap = (String) session.getAttribute("tenDangNhap");
+        if (tenDangNhap == null) {
             return "redirect:/login";
         }
-        int pageSize = 4;
-        List<String> productNames = nhanVienRepository.getDistinctProductName();
-        List<NhanVien> products = nhanVienRepository.findPage(page, pageSize);
-        List<NhanVien> maskedEmployees = products.stream().map(this::maskPassword).collect(Collectors.toList());
-        int totalProducts = nhanVienRepository.findAll().size();
-        int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
-        model.addAttribute("productNames", productNames);
+        keyword = "%" + keyword + "%";
+        Page<NhanVien> ds = this.nhanVienRepository.findByTenLike(keyword, PageRequest.of(pageNumber, pageSize));
+        Page<NhanVien> maskedEmployees = ds.map(this::maskPassword);
+        model.addAttribute("data", ds);
         model.addAttribute("data", maskedEmployees);
-        model.addAttribute("page", page);
-        model.addAttribute("maxPage", maxPage);
-        return "nhan_vien/nhanvien";
-    }
-
-    @GetMapping("searchnhanvien")
-    public String searchSanPhams(@RequestParam("ten") String ten, Model model) {
-        List<NhanVien> products = nhanVienRepository.findByName(ten);
-        List<NhanVien> maskedEmployees = products.stream().map(this::maskPassword).collect(Collectors.toList());
-        model.addAttribute("data", maskedEmployees);
-        List<String> productNames = nhanVienRepository.getDistinctProductName();
-        model.addAttribute("productNames", productNames);
         return "nhan_vien/nhanvien";
     }
 
@@ -64,7 +51,7 @@ public class NhanVienController {
     }
 
     @GetMapping("createnhanvien")
-    public String create()
+    public String create(@ModelAttribute("data") NhanVien nhanVien)
     {
         return "nhan_vien/createnhanvien";
     }
@@ -81,7 +68,7 @@ public class NhanVienController {
             model.addAttribute("data", nv);
             return "nhan_vien/createnhanvien";
         }
-        this.nhanVienRepository.create(nv);
+        this.nhanVienRepository.save(nv);
         return "redirect:/nhan-vien/nhanvien";
     }
 
@@ -94,14 +81,14 @@ public class NhanVienController {
 
     @GetMapping("nhanvienedit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        NhanVien nv = this.nhanVienRepository.findById(id);
+        NhanVien nv = this.nhanVienRepository.findById(id).get();
         model.addAttribute("data", nv);
         return "nhan_vien/nhanvienedit";
     }
 
     @PostMapping("nhanvienupdate/{id}")
     public String update(NhanVien nv){
-        this.nhanVienRepository.Update(nv);
+        this.nhanVienRepository.save(nv);
         return "redirect:/nhan-vien/nhanvien";
     }
 }

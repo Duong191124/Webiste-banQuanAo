@@ -19,7 +19,17 @@
 <body>
 <div class="d-flex justify-content-between mt-2">
     <h4>Danh sách sản phẩm</h4>
-    <a href="${pageContext.request.contextPath}/back" class="btn btn-info">Back</a>
+    <c:choose>
+        <c:when test="${sessionScope.role == 1}">
+            <a href="${pageContext.request.contextPath}/admin/adminindex" class="btn btn-info">Back</a>
+        </c:when>
+        <c:when test="${sessionScope.role == 0}">
+            <a href="${pageContext.request.contextPath}/user/userindex" class="btn btn-info">Back</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/login" class="btn btn-info">Back</a>
+        </c:otherwise>
+    </c:choose>
 </div>
 <div class="mt-2">
     <form action="/san-pham/searchsanpham" method="get">
@@ -32,6 +42,9 @@
     </form>
 </div>
 <div class="mt-2">
+    <a href="/san-pham/createsanpham" class="btn btn-success">Thêm sản phẩm</a>
+</div>
+<div class="mt-2">
     <table class="table">
         <tr>
             <th>ID</th>
@@ -40,14 +53,14 @@
             <th>Trạng thái</th>
             <th>Thao tác</th>
         </tr>
-        <c:forEach items="${products}" var="product">
+        <c:forEach items="${products.content}" var="product">
             <tr>
                 <td>${product.id}</td>
                 <td>${product.ma}</td>
                 <td>${product.ten}</td>
                 <td>${product.trangThai == 1 ? "Hoạt động" : "Không hoạt động"}</td>
                 <td>
-                    <a href="/spct/spctdetail?idSanPham=${product.id}" class="btn btn-primary">Chi Tiết</a>
+                    <a href="/spct/spct?idSanPham=${product.id}" class="btn btn-primary">Chi Tiết</a>
                     <a href="/san-pham/sanphamdelete/${product.id}" class="btn btn-danger">Delete</a>
                     <a href="/san-pham/sanphamedit/${product.id}" class="btn btn-warning">Edit</a>
                 </td>
@@ -57,20 +70,20 @@
 </div>
 <div class="mt-2 d-flex justify-content-center">
     <ul class="pagination">
-        <li class="page-item">
-            <c:if test="${page > 1}">
-                <a href="?page=${page - 1}" class="page-link">Previous</a>
-            </c:if>
+        <li class="page-item ${products.number == 0 ? 'disabled' : ''}">
+            <a class="page-link" href="/san-pham/sanpham?page=${products.number - 1}">Previous</a>
         </li>
-        <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-            <li class="page-item">
-                <a href="?page=${pageNumber}" class="page-link">${pageNumber}</a>
-            </li>
-        </c:forEach>
-        <li class="page-item">
-            <c:if test="${page < maxPage}">
-                <a href="?page=${page + 1}" class="page-link">Next</a>
+        <c:forEach begin="1" end="${products.totalPages}" var="page">
+            <c:if test="${page == 1 || page == products.totalPages || (page >= products.number && page <= products.number + 2)}">
+                <li class="page-item ${page == products.number + 1 ? 'active' : ''}">
+                    <a class="page-link" href="/san-pham/sanpham?page=${page - 1}">
+                            ${page}
+                    </a>
+                </li>
             </c:if>
+        </c:forEach>
+        <li class="page-item ${products.number + 1 >= products.totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="/san-pham/sanpham?page=${products.number + 1}">Next</a>
         </li>
     </ul>
 </div>

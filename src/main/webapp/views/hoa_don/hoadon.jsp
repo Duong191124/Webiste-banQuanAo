@@ -35,15 +35,19 @@
         <thead>
         <tr>
             <th>ID</th>
+            <th>Tên khách hàng</th>
+            <th>Mã nhân viên</th>
             <th>Ngày mua hàng</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${data}" var="hoadon" varStatus="HD">
+        <c:forEach items="${data.content}" var="hoadon" varStatus="HD">
             <tr>
                 <td>${hoadon.id}</td>
+                <td>${hoadon.kh.ten}</td>
+                <td>${hoadon.nv.ma}</td>
                 <td>${hoadon.ngayMuaHang}</td>
                 <td>${hoadon.trangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán"}</td>
                 <td>
@@ -59,20 +63,19 @@
 <div class="mt-2 d-flex justify-content-center">
     <ul class="pagination">
         <li class="page-item">
-            <c:if test="${page > 1}">
-                <a href="?page=${page - 1}" class="page-link">Previous</a>
-            </c:if>
+            <a class="page-link" href="/hoa-don/hoadon?page=${data.number - 1}">Previous</a>
         </li>
-        <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-            <li class="page-item">
-                <a href="?page=${pageNumber}" class="page-link">${pageNumber}</a>
-            </li>
+        <c:forEach begin="1" end="${ data.totalPages }" var="page">
+            <c:if test="${ page == 1 || page == data.totalPages || ( page >= data.number - 1 && page <= data.number + 1 ) }">
+                <li class="page-item">
+                    <a class="page-link"
+                       href="/hoa-don/hoadon?page=${page}">
+                            ${ page }
+                    </a>
+                </li>
+            </c:if>
         </c:forEach>
-        <li class="page-item">
-            <c:if test="${page < maxPage}">
-                <a href="?page=${page + 1}" class="page-link">Next</a>
-            </c:if>
-        </li>
+        <li class="page-item"><a class="page-link" href="/hoa-don/hoadon?page=${data.number + 1}">Next</a></li>
     </ul>
 </div>
 </body>

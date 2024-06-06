@@ -26,6 +26,8 @@
         <thead>
         <tr>
             <th>ID</th>
+            <th>Mã hóa đơn</th>
+            <th>Mã spct</th>
             <th>Số lượng</th>
             <th>Đơn giá</th>
             <th>Thời gian</th>
@@ -34,9 +36,11 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${data}" var="hdct" varStatus="HDCT">
+        <c:forEach items="${data.content}" var="hdct" varStatus="HDCT">
             <tr>
                 <td>${hdct.id}</td>
+                <td>${hdct.hd.id}</td>
+                <td>${hdct.spct.maSPCT}</td>
                 <td>${hdct.soLuong}</td>
                 <td>${hdct.donGia}</td>
                 <td>${hdct.thoiGian}</td>
@@ -49,25 +53,6 @@
 
         </tbody>
     </table>
-</div>
-<div class="mt-2 d-flex justify-content-center">
-    <ul class="pagination">
-        <li class="page-item">
-            <c:if test="${page > 1}">
-                <a href="hdctdetail?idHoaDon=${idHoaDon}&page=${page - 1}" class="page-link">Previous</a>
-            </c:if>
-        </li>
-        <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-            <li class="page-item ${pageNumber == page ? 'active' : ''}">
-                <a href="hdctdetail?idHoaDon=${idHoaDon}&page=${pageNumber}" class="page-link">${pageNumber}</a>
-            </li>
-        </c:forEach>
-        <li class="page-item">
-            <c:if test="${page < maxPage}">
-                <a href="hdctdetail?idHoaDon=${idHoaDon}&page=${page + 1}" class="page-link">Next</a>
-            </c:if>
-        </li>
-    </ul>
 </div>
 </body>
 </html>

@@ -19,7 +19,17 @@
 <body>
 <div class="d-flex justify-content-between mt-2">
     <h4>Danh sách khách hàng</h4>
-    <a href="${pageContext.request.contextPath}/back" class="btn btn-info">Back</a>
+    <c:choose>
+        <c:when test="${sessionScope.role == 1}">
+            <a href="${pageContext.request.contextPath}/admin/adminindex" class="btn btn-info">Back</a>
+        </c:when>
+        <c:when test="${sessionScope.role == 0}">
+            <a href="${pageContext.request.contextPath}/user/userindex" class="btn btn-info">Back</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/login" class="btn btn-info">Back</a>
+        </c:otherwise>
+    </c:choose>
 </div>
 <div class="mt-2">
     <form action="/khach-hang/searchkhachhang" method="get">
@@ -47,7 +57,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${data}" var="kh" varStatus="KH">
+        <c:forEach items="${data.content}" var="kh" varStatus="KH">
             <tr>
                 <td>${kh.id}</td>
                 <td>${kh.ma}</td>
@@ -67,20 +77,19 @@
 <div class="mt-2 d-flex justify-content-center">
     <ul class="pagination">
         <li class="page-item">
-            <c:if test="${page > 1}">
-                <a href="?page=${page - 1}" class="page-link">Previous</a>
-            </c:if>
+            <a class="page-link" href="/khach-hang/khachhang?page=${data.number - 1}">Previous</a>
         </li>
-        <c:forEach var="pageNumber" begin="1" end="${maxPage}">
-            <li class="page-item">
-                <a href="?page=${pageNumber}" class="page-link">${pageNumber}</a>
-            </li>
+        <c:forEach begin="1" end="${ data.totalPages }" var="page">
+            <c:if test="${ page == 1 || page == data.totalPages || ( page >= data.number - 1 && page <= data.number + 1 ) }">
+                <li class="page-item">
+                    <a class="page-link"
+                       href="/khach-hang/khachhang?page=${page}">
+                            ${ page }
+                    </a>
+                </li>
+            </c:if>
         </c:forEach>
-        <li class="page-item">
-            <c:if test="${page < maxPage}">
-                <a href="?page=${page + 1}" class="page-link">Next</a>
-            </c:if>
-        </li>
+        <li class="page-item"><a class="page-link" href="/khach-hang/khachhang?page=${data.number + 1}">Next</a></li>
     </ul>
 </div>
 </body>

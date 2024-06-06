@@ -1,57 +1,54 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.HoaDon;
 import com.example.demo.entity.HoaDonChiTiet;
 import com.example.demo.entity.SanPhamChiTiet;
-import com.example.demo.repository.HoaDonChiTietRepository;
+import com.example.demo.repository.HoaDonChiTietRepo;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("hdct")
 public class HoaDonChiTietController {
     @Autowired
-    private HoaDonChiTietRepository hoaDonChiTietRepository;
+    private HoaDonChiTietRepo hoaDonChiTietRepository;
 
     @GetMapping("hdctdetail")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam("idHoaDon") Integer idHoaDon){
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
+    public String index(Model model, HttpSession session, @RequestParam("idHoaDon") Integer idHoaDon, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "20") int pageSize){
+        String tenDangNhap = (String) session.getAttribute("tenDangNhap");
+        if (tenDangNhap == null) {
             return "redirect:/login";
         }
-        int pageSize = 4;
-        List<HoaDonChiTiet> products = hoaDonChiTietRepository.findPageByHDId(idHoaDon, page, pageSize);
-        int totalProducts = hoaDonChiTietRepository.findByHDId(idHoaDon).size();
-        int maxPage = (int) Math.ceil((double) totalProducts / pageSize);
+        Page<HoaDonChiTiet> p;
+        if (idHoaDon != null) {
+            p = hoaDonChiTietRepository.findByHdId(idHoaDon, PageRequest.of(pageNumber - 1, pageSize));
+        } else {
+            p = hoaDonChiTietRepository.findAll(PageRequest.of(pageNumber - 1, pageSize));
+        }
 
-        model.addAttribute("data", products);
-        model.addAttribute("page", page);
-        model.addAttribute("maxPage", maxPage);
+        model.addAttribute("data", p);
         model.addAttribute("idHoaDon", idHoaDon);
+        model.addAttribute("pageSize", pageSize);
         return "hdct/hdct";
     }
 
 
     @GetMapping("hdctedit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        HoaDonChiTiet hdct = this.hoaDonChiTietRepository.findById(id);
+        HoaDonChiTiet hdct = this.hoaDonChiTietRepository.findById(id).get();
         model.addAttribute("data", hdct);
         return "hdct/hdctedit";
     }
 
     @PostMapping("hdctupdate/{id}")
     public String update(HoaDonChiTiet hdct){
-        this.hoaDonChiTietRepository.Update(hdct);
+        this.hoaDonChiTietRepository.save(hdct);
         return "redirect:/hdct/hdct";
     }
 }
