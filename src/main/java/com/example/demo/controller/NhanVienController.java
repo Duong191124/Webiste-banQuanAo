@@ -27,8 +27,8 @@ public class NhanVienController {
 
     @GetMapping("nhanvien")
     public String index(Model model,HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber,
-                        @RequestParam(name = "limit", defaultValue = "20") int pageSize,
-                        @RequestParam(value = "keyword", defaultValue = "") String keyword){
+                        @RequestParam(name = "limit", defaultValue = "10") int pageSize,
+                        @RequestParam(name = "keyword", defaultValue = "") String keyword){
         String tenDangNhap = (String) session.getAttribute("tenDangNhap");
         if (tenDangNhap == null) {
             return "redirect:/login";
@@ -36,8 +36,8 @@ public class NhanVienController {
         keyword = "%" + keyword + "%";
         Page<NhanVien> ds = this.nhanVienRepository.findByTenLike(keyword, PageRequest.of(pageNumber, pageSize));
         Page<NhanVien> maskedEmployees = ds.map(this::maskPassword);
-        model.addAttribute("data", ds);
         model.addAttribute("data", maskedEmployees);
+        model.addAttribute("keyword", keyword);
         return "nhan_vien/nhanvien";
     }
 

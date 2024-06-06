@@ -20,28 +20,28 @@
     <form action="/spct/spctupdate/${data.id}" method="POST">
         <div class="mt-2">
             <label for="" class="form-label">Sản phẩm: </label>
-            <select name="sp" value="${data.sp.ten}" class="form-control">
-                <option value="${data.sp.ten}">${data.sp.ten}</option>
+            <select name="sp.id" class="form-control">
+                <option value="${data.sp.id}" selected>${data.sp.ten}</option>
                 <c:forEach var="product" items="${availableProducts}">
-                    <option value="${product}">${product}</option>
+                    <option value="${product.id}" <c:if test="${product.id == data.sp.id}">selected</c:if>>${product.ten}</option>
                 </c:forEach>
             </select>
         </div>
         <div class="mt-2">
             <label for="" class="form-label">Màu sắc: </label>
-            <select name="ms" value="${data.ms.ten}" class="form-control">
-                <option value="${data.ms.ten}">${data.ms.ten}</option>
+            <select name="ms.id" class="form-control">
+                <option value="${data.ms.id}" selected>${data.ms.ten}</option>
                 <c:forEach var="color" items="${availableColors}">
-                    <option value="${color}">${color}</option>
+                    <option value="${color.id}" <c:if test="${color.id == data.ms.id}">selected</c:if>>${color.ten}</option>
                 </c:forEach>
             </select>
         </div>
         <div class="mt-2">
             <label for="" class="form-label">Kích thước: </label>
-            <select name="kt" value="${data.kt.ten}" class="form-control">
-                <option value="${data.kt.ten}">${data.kt.ten}</option>
+            <select name="kt.id" class="form-control">
+                <option value="${data.kt.id}" selected>${data.kt.ten}</option>
                 <c:forEach var="size" items="${availableSizes}">
-                    <option value="${size}">${size}</option>
+                    <option value="${size.id}" <c:if test="${size.id == data.kt.id}">selected</c:if>>${size.ten}</option>
                 </c:forEach>
             </select>
         </div>
@@ -58,10 +58,10 @@
             <input type="text" placeholder="Đơn giá" class="form-control" name="donGia" value="${data.donGia}">
         </div>
         <div class="mt-2">
-            <label for="" class="form-label">Trang thai: </label>
-            <select name="trangThai" id="" class="form-control" value="${data.trangThai}">
-                <option value="1">Hoạt động</option>
-                <option value="0">Không hoạt động</option>
+            <label for="" class="form-label">Trạng thái: </label>
+            <select name="trangThai" id="" class="form-control">
+                <option value="1" <c:if test="${data.trangThai == 1}">selected</c:if>>Hoạt động</option>
+                <option value="0" <c:if test="${data.trangThai == 0}">selected</c:if>>Không hoạt động</option>
             </select>
         </div>
         <div class="mt-2">

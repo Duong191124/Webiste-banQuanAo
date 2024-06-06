@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -20,6 +20,24 @@
 <h4>Update</h4>
 <form action="/hoa-don/hoadonupdate/${data.id}" method="POST">
     <div class="mt-2">
+        <label for="" class="form-label">Khách hàng: </label>
+        <select name="kh.id" class="form-control">
+            <option value="${data.kh.id}" selected>${data.kh.ten}</option>
+            <c:forEach var="user" items="${availableUser}">
+                <option value="${user.id}" <c:if test="${user.id == data.kh.id}">selected</c:if>>${user.ten}</option>
+            </c:forEach>
+        </select>
+    </div>
+    <div class="mt-2">
+        <label for="" class="form-label">Nhân viên: </label>
+        <select name="nv.id" class="form-control">
+            <option value="${data.nv.id}" selected>${data.nv.ten}</option>
+            <c:forEach var="employee" items="${availableEmployee}">
+                <option value="${employee.id}" <c:if test="${employee.id == data.nv.id}">selected</c:if>>${employee.ten}</option>
+            </c:forEach>
+        </select>
+    </div>
+    <div class="mt-2">
         <label for="" class="form-label">Ngày mua hàng: </label>
         <input type="date" placeholder="Ngày mua hàng" class="form-control" name="ngayMuaHang" value="${data.ngayMuaHang}">
     </div>

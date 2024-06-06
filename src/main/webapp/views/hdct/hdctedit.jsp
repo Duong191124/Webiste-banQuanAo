@@ -20,6 +20,24 @@
 <h4>Update</h4>
 <form action="/hdct/hdctupdate/${data.id}" method="POST">
     <div class="mt-2">
+        <label for="" class="form-label">Hóa đơn: </label>
+        <select name="hd.id" class="form-control">
+            <option value="${data.hd.id}" selected>${data.hd.id}</option>
+            <c:forEach var="bill" items="${availableBills}">
+                <option value="${bill.id}" <c:if test="${bill.id == data.hd.id}">selected</c:if>>${bill.id}</option>
+            </c:forEach>
+        </select>
+    </div>
+    <div class="mt-2">
+        <label for="" class="form-label">SPCT: </label>
+        <select name="spct.id" class="form-control">
+            <option value="${data.spct.id}" selected>${data.spct.maSPCT}</option>
+            <c:forEach var="productdetails" items="${availableProductDetails}">
+                <option value="${productdetails.id}" <c:if test="${productdetails.id == data.spct.id}">selected</c:if>>${productdetails.maSPCT}</option>
+            </c:forEach>
+        </select>
+    </div>
+    <div class="mt-2">
         <label for="" class="form-label">Số lượng: </label>
         <input type="text" placeholder="Số lượng" name="soLuong" class="form-control" value="${data.soLuong}">
     </div>
@@ -38,7 +56,7 @@
             <option value="0" ${data.trangThai == 0 ? "selected" : ""}>Không hoạt động</option>
         </select>
     </div>
-    <div class="mt-2">
+    <div class="mt-2 d-flex justify-content-center">
         <button type="submit" class="btn btn-success w-25 rounded rounded-2">Update</button>
     </div>
 </form>

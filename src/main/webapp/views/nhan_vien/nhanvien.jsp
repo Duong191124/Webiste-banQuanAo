@@ -31,6 +31,10 @@
         </c:otherwise>
     </c:choose>
 </div>
+<form action="/nhan-vien/nhanvien" method="get">
+    <input type="text" name="keyword" placeholder="Nhập từ khóa tìm kiếm" />
+    <button type="submit">Tìm kiếm</button>
+</form>
 <div class="mt-2">
     <a href="/nhan-vien/createnhanvien" class="btn btn-success">Thêm nhân viên</a>
 </div>

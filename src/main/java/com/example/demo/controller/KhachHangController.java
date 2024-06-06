@@ -25,7 +25,7 @@ public class KhachHangController {
     private KhachHangRepo khachHangRepository;
 
     @GetMapping("khachhang")
-    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "20") int pageSize){
+    public String index(Model model, HttpSession session, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "10") int pageSize){
         String tenDangNhap = (String) session.getAttribute("tenDangNhap");
         if (tenDangNhap == null) {
             return "redirect:/login";

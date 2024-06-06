@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.HoaDon;
 import com.example.demo.entity.HoaDonChiTiet;
 import com.example.demo.entity.SanPhamChiTiet;
 import com.example.demo.repository.HoaDonChiTietRepo;
+import com.example.demo.repository.HoaDonRepo;
+import com.example.demo.repository.SanPhamChiTietRepo;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,8 +22,14 @@ public class HoaDonChiTietController {
     @Autowired
     private HoaDonChiTietRepo hoaDonChiTietRepository;
 
+    @Autowired
+    private HoaDonRepo hoaDonRepo;
+
+    @Autowired
+    private SanPhamChiTietRepo sanPhamChiTietRepo;
+
     @GetMapping("hdctdetail")
-    public String index(Model model, HttpSession session, @RequestParam("idHoaDon") Integer idHoaDon, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "20") int pageSize){
+    public String index(Model model, HttpSession session, @RequestParam("idHoaDon") Integer idHoaDon, @RequestParam(name = "page", defaultValue = "1") int pageNumber, @RequestParam(name = "limit", defaultValue = "10") int pageSize){
         String tenDangNhap = (String) session.getAttribute("tenDangNhap");
         if (tenDangNhap == null) {
             return "redirect:/login";
@@ -42,13 +51,27 @@ public class HoaDonChiTietController {
     @GetMapping("hdctedit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
         HoaDonChiTiet hdct = this.hoaDonChiTietRepository.findById(id).get();
+        List<HoaDon> hd = hoaDonRepo.findAll();
+        List<SanPhamChiTiet> spct = sanPhamChiTietRepo.findAll();
+        model.addAttribute("availableBills", hd);
+        model.addAttribute("availableProductDetails", spct);
         model.addAttribute("data", hdct);
         return "hdct/hdctedit";
     }
 
     @PostMapping("hdctupdate/{id}")
-    public String update(HoaDonChiTiet hdct){
+    public String update(@PathVariable("id") Integer id, @ModelAttribute HoaDonChiTiet hdct){
+        HoaDonChiTiet existingHdct = hoaDonChiTietRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid product detail ID:" + id));
+
+        existingHdct.setHd(hdct.getHd());
+        existingHdct.setSpct(hdct.getSpct());
+        existingHdct.setSoLuong(hdct.getSoLuong());
+        existingHdct.setDonGia(hdct.getDonGia());
+        existingHdct.setThoiGian(hdct.getThoiGian());
+        existingHdct.setTrangThai(hdct.getTrangThai());
         this.hoaDonChiTietRepository.save(hdct);
-        return "redirect:/hdct/hdct";
+
+        int hoaDonId = existingHdct.getHd().getId();
+        return "redirect:/hdct/hdctdetail?idHoaDon=" + hoaDonId;
     }
 }

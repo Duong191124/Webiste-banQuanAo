@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface NhanVienRepo extends JpaRepository<NhanVien, Integer> {
-    Page<NhanVien> findByTenLike(String keyword, Pageable pageable);
+    Page<NhanVien> findByTenLike(String ten, Pageable pageable);
     NhanVien findByTenDangNhap(String tenDangNhap);
 }

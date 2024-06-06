@@ -65,16 +65,9 @@ public class SanPhamChiTietController {
 
         List<KichThuoc> kt = kichThuocRepo.findAll();
 
-        Set<SanPham> distinctSanPhams = new HashSet<>(sp);
-
-        Set<MauSac> distinctMauSacs = new HashSet<>(ms);
-
-        Set<KichThuoc> distinctKichThuocs = new HashSet<>(kt);
-
-
-        model.addAttribute("availableProducts", distinctSanPhams);
-        model.addAttribute("availableColors", distinctMauSacs);
-        model.addAttribute("availableSizes", distinctKichThuocs);
+        model.addAttribute("availableProducts", sp);
+        model.addAttribute("availableColors", ms);
+        model.addAttribute("availableSizes", kt);
 
         return "spct/createspct";
     }
@@ -88,14 +81,24 @@ public class SanPhamChiTietController {
             for(FieldError f : fieldErrors){
                 errors.put(f.getField(), f.getDefaultMessage());
             }
+            List<SanPham> sp = sanPhamRepo.findAll();
+
+            List<MauSac> ms = mauSacRepo.findAll();
+
+            List<KichThuoc> kt = kichThuocRepo.findAll();
+
             model.addAttribute("error", errors);
             model.addAttribute("data", spct);
-            System.out.println("Deo dc");
+            model.addAttribute("availableProducts", sp);
+            model.addAttribute("availableColors", ms);
+            model.addAttribute("availableSizes", kt);
             return "spct/createspct";
         }
         this.sanPhamChiTietRepo.save(spct);
-        System.out.println("dc");
-        return "redirect:/san-pham/sanpham";
+
+        int sanPhamId = spct.getSp().getId();
+
+        return "redirect:/spct/spct?idSanPham=" + sanPhamId;
     }
 
     @GetMapping("spctdelete/{id}")
@@ -122,8 +125,21 @@ public class SanPhamChiTietController {
     }
 
     @PostMapping("spctupdate/{id}")
-    public String update(SanPhamChiTiet spct){
-        this.sanPhamChiTietRepo.save(spct);
-        return "redirect:/san-pham/sanpham";
+    public String update(@PathVariable("id") Integer id, @ModelAttribute SanPhamChiTiet spct){
+
+        SanPhamChiTiet existingSpct = sanPhamChiTietRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid product detail ID:" + id));
+
+        existingSpct.setSp(spct.getSp());
+        existingSpct.setMs(spct.getMs());
+        existingSpct.setKt(spct.getKt());
+        existingSpct.setMaSPCT(spct.getMaSPCT());
+        existingSpct.setSoLuong(spct.getSoLuong());
+        existingSpct.setDonGia(spct.getDonGia());
+        existingSpct.setTrangThai(spct.getTrangThai());
+
+        sanPhamChiTietRepo.save(existingSpct);
+
+        int sanPhamId = existingSpct.getSp().getId();
+        return "redirect:/spct/spct?idSanPham=" + sanPhamId;
     }
 }

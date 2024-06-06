@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Negative;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,11 +30,9 @@ public class HoaDonChiTiet {
     private SanPhamChiTiet spct;
 
     @Column(name = "SoLuong")
-    @Negative(message = "Số lượng lớn hơn 0")
     private int soLuong;
 
     @Column(name = "DonGia")
-    @Negative(message = "Giá lớn hơn 0")
     private double donGia;
 
     @Column(name = "ThoiGian")

@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Negative;
 import jakarta.validation.constraints.NegativeOrZero;
 import jakarta.validation.constraints.NotBlank;
@@ -36,11 +37,11 @@ public class SanPhamChiTiet {
     private String maSPCT;
 
     @Column(name = "SoLuong")
-    @NegativeOrZero(message = "Số lượng lớn hơn 0")
+    @Min(value = 1, message = "Số lượng lớn hơn 0")
     private int soLuong;
 
     @Column(name = "DonGia")
-    @NegativeOrZero(message = "Giá lớn hơn 0")
+    @Min(value = 1, message = "Giá phải lớn hơn 0")
     private double donGia;
 
     @Column(name = "TrangThai")
